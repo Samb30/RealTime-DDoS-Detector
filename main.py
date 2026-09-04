@@ -3,6 +3,7 @@ from kafka import KafkaConsumer
 import json
 import threading
 from contextlib import asynccontextmanager
+from ml_service import predict_traffic
 
 # A temporary list to hold our traffic before we set up InfluxDB
 latest_traffic = []
@@ -19,11 +20,11 @@ def consume_messages():
     
     # Continuously listen for new messages
     for message in consumer:
-        traffic_data = message.value
+        raw_data = message.value
         
-        # TODO: We will pass traffic_data to the LSTM model here later!
-        
-        latest_traffic.append(traffic_data)
+        prediction_result = predict_traffic(raw_data)    
+            
+        latest_traffic.append(prediction_result)
         
         # Keep only the last 10 records to save memory
         if len(latest_traffic) > 10:
