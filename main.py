@@ -4,6 +4,7 @@ import json
 import threading
 from contextlib import asynccontextmanager
 from ml_service import predict_traffic
+from influx_service import write_prediction_to_db
 
 # A temporary list to hold our traffic before we set up InfluxDB
 latest_traffic = []
@@ -22,7 +23,9 @@ def consume_messages():
     for message in consumer:
         raw_data = message.value
         
-        prediction_result = predict_traffic(raw_data)    
+        prediction_result = predict_traffic(raw_data)   
+        
+        write_prediction_to_db(prediction_result) 
             
         latest_traffic.append(prediction_result)
         
