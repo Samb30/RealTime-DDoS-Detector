@@ -1,11 +1,19 @@
+import os
+from dotenv import load_dotenv
 from influxdb_client import InfluxDBClient, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
 
-# InfluxDB Configuration
-URL = "http://localhost:8086"
-TOKEN = "XkPuCCCnw8eXUzfv0xKlJF9swrFxBBWv15-IAouSygu33q63QqohqVeMnBPG2LjzsPyMtpTtFL_0ifnVsDwM8w=="
-ORG = "portfolio-org"
-BUCKET = "ddos-predictions"
+# Load environment variables from .env
+load_dotenv()
+
+# InfluxDB Configuration (now from environment, not hardcoded)
+URL = os.environ.get("INFLUX_URL")
+TOKEN = os.environ.get("INFLUX_TOKEN")
+ORG = os.environ.get("INFLUX_ORG")
+BUCKET = os.environ.get("INFLUX_BUCKET")
+
+if not TOKEN:
+    raise ValueError("INFLUX_TOKEN not found. Make sure your .env file exists and is loaded.")
 
 # Initialize the InfluxDB client and write API
 client = InfluxDBClient(url=URL, token=TOKEN, org=ORG)
