@@ -1,4 +1,8 @@
 venv/
+venv_training/
 __pycache__/
 *.csv
+*.parquet
 .env
+.ipynb_checkpoints/
+training/data/
